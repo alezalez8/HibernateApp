@@ -1,15 +1,16 @@
 package org.example.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Entity()
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
 @Table(name = "Person")
 public class Person {
-    @Id()
+
+    @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "name")
@@ -18,11 +19,22 @@ public class Person {
     @Column(name = "age")
     private int age;
 
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
+
+    @OneToMany(mappedBy = "owner")
+    private List<Item> items;
+
+
     public Person() {
     }
 
-    public Person(int id, String name, int age) {
-        this.id = id;
+    public Person(String name, int age) {
         this.name = name;
         this.age = age;
     }
@@ -50,5 +62,13 @@ public class Person {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
     }
 }
