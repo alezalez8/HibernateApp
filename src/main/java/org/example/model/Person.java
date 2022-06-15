@@ -27,6 +27,10 @@ public class Person {
         this.items = items;
     }
 
+   /* public void setItems(Item item) {
+        items.add(item);
+    }*/
+
     @OneToMany(mappedBy = "owner")
     private List<Item> items;
 

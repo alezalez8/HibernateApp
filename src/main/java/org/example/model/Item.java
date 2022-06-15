@@ -32,8 +32,9 @@ public class Item {
         this.owner = owner;
     }
 
-    public Item(String itemName) {
+    public Item(String itemName, Person owner) {
         this.itemName = itemName;
+        this.owner = owner;
 
     }
 
