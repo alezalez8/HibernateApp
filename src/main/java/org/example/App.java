@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,13 +31,31 @@ public class App {
             List<Item> items = person.getItems();
             System.out.println(items);
             session.save(item);*/
+            //=================================================
+/*
             Person person = new Person("Aleksandr", 49);
 
             Item item = new Item("1 billion buks", person);
 
             person.setItems(new ArrayList<>(Collections.singletonList(item)));
-            //session.save(person);
-            session.save(item);
+            session.save(person);
+*/
+            //session.save(item);
+            //=================================================
+
+            Person person = new Person("Test cascading", 30);
+
+
+            person.addItem(new Item("item1"));
+            person.addItem(new Item("item2"));
+            person.addItem(new Item("item3"));
+
+            session.save(person);
+
+
+
+
+
             session.getTransaction().commit();
 
         } finally {
