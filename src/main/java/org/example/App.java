@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.model.*;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -16,38 +17,30 @@ import java.util.List;
  */
 public class App {
     public static void main(String[] args) {
-        Configuration configuration = new Configuration().addAnnotatedClass(Actor.class)
-                .addAnnotatedClass(Movie.class);
+        Configuration configuration = new Configuration().addAnnotatedClass(Person.class)
+                .addAnnotatedClass(Item.class);
 
         SessionFactory sessionFactory = configuration.buildSessionFactory();
 
         try (sessionFactory) {
             Session session = sessionFactory.getCurrentSession();
-
-
             session.beginTransaction();
-           /* Movie movie = new Movie("Pulp fiction", 1994);
-            Actor actor1 = new Actor("Harvey Keitel", 81);
-            Actor actor2 = new Actor("Samuel L. Jackson", 72);*/
 
             // Arrays.asList() почти то же, что и List.of(), первый изменяемый(сами элементы, но не размер)
-            /*movie.setActors(new ArrayList<>(List.of(actor1, actor2)));
-            actor1.setMovies(new ArrayList<>(Collections.singletonList(movie)));
-            actor2.setMovies(new ArrayList<>(Collections.singletonList(movie)));*/
+            Person person = session.get(Person.class, 1);
+            System.out.println("Получили человека");
 
-           /* Movie movie = new Movie("Reservoir Dogs", 1992);
-            Actor actor = session.get(Actor.class, 4);
-            movie.setActors(new ArrayList<>(Collections.singletonList(actor)));
-            actor.getMovies().add(movie);
-            session.save(movie);*/
+            session.getTransaction().commit();
+            System.out.println("Session is end");
 
-            Actor actor = session.get(Actor.class, 4);
-            System.out.println(actor.getMovies());
+            session = sessionFactory.getCurrentSession();
+            session.beginTransaction();
+            System.out.println("Open second session");
 
-            Movie movieToRemove = actor.getMovies().get(0);
+            person = (Person) session.merge(person);
 
-            actor.getMovies().remove(0);
-            movieToRemove.getActors().remove(actor);
+            System.out.println("2:  " + person.getItems());
+
             session.getTransaction().commit();
         }
 

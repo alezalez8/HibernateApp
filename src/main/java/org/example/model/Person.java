@@ -22,20 +22,12 @@ public class Person {
     @Column(name = "age")
     private int age;
 
-    public List<Item> getItems() {
-        return items;
-    }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
-    }
-
-
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     private List<Item> items;
 
-    @OneToOne(mappedBy = "person")
+/*    @OneToOne(mappedBy = "person")
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     private Passport passport;
 
@@ -46,8 +38,14 @@ public class Person {
     public void setPassport(Passport passport) {
         this.passport = passport;
         passport.setPerson(this);
+    }*/
 
+    public List<Item> getItems() {
+        return items;
+    }
 
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 
     public Person() {
