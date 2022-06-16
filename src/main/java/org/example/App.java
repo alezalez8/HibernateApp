@@ -1,8 +1,6 @@
 package org.example;
 
-import org.example.model.Item;
-import org.example.model.Passport;
-import org.example.model.Person;
+import org.example.model.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -18,37 +16,39 @@ import java.util.List;
  */
 public class App {
     public static void main(String[] args) {
-        Configuration configuration = new Configuration().addAnnotatedClass(Person.class)
-                .addAnnotatedClass(Item.class)
-                .addAnnotatedClass(Passport.class);
-
+        Configuration configuration = new Configuration().addAnnotatedClass(Actor.class)
+                .addAnnotatedClass(Movie.class);
 
         SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.getCurrentSession();
-        try {
+
+        try (sessionFactory) {
+            Session session = sessionFactory.getCurrentSession();
+
+
             session.beginTransaction();
+           /* Movie movie = new Movie("Pulp fiction", 1994);
+            Actor actor1 = new Actor("Harvey Keitel", 81);
+            Actor actor2 = new Actor("Samuel L. Jackson", 72);*/
 
-            /*Person person = new Person("Aleks", 49);
-            Passport passport = new Passport(12345);
-            person.setPassport(passport);*/
-           /* Passport passport = session.get(Passport.class, 22);
-            System.out.println(passport.getPerson().getName() + ", " + passport.getPerson().getAge());*/
-            //Person person = session.get(Person.class, 23);
-            //person.getPassport().setPassportNumber(7777777);
-            //session.delete(person);  // hibernate
-            //session.remove(person); // jpa
-            //session.update(person);
-            Person person = new Person("Gena", 49);
-            Passport passport = new Passport(555555);
+            // Arrays.asList() почти то же, что и List.of(), первый изменяемый(сами элементы, но не размер)
+            /*movie.setActors(new ArrayList<>(List.of(actor1, actor2)));
+            actor1.setMovies(new ArrayList<>(Collections.singletonList(movie)));
+            actor2.setMovies(new ArrayList<>(Collections.singletonList(movie)));*/
 
-            person.setPassport(passport);
-            session.save(person);
+           /* Movie movie = new Movie("Reservoir Dogs", 1992);
+            Actor actor = session.get(Actor.class, 4);
+            movie.setActors(new ArrayList<>(Collections.singletonList(actor)));
+            actor.getMovies().add(movie);
+            session.save(movie);*/
 
+            Actor actor = session.get(Actor.class, 4);
+            System.out.println(actor.getMovies());
 
+            Movie movieToRemove = actor.getMovies().get(0);
+
+            actor.getMovies().remove(0);
+            movieToRemove.getActors().remove(actor);
             session.getTransaction().commit();
-
-        } finally {
-            sessionFactory.close();
         }
 
 
