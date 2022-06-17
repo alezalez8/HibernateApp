@@ -25,10 +25,16 @@ public class App {
         try (sessionFactory) {
             Session session = sessionFactory.getCurrentSession();
             session.beginTransaction();
-
-            // Arrays.asList() почти то же, что и List.of(), первый изменяемый(сами элементы, но не размер)
             Person person = session.get(Person.class, 1);
+
+            List<Item> itemList = session.createQuery("select i from Item i where i.owner.id=:personId", Item.class)
+                            .setParameter("personId", person.getId()).getResultList();
+
+            System.out.println(itemList);
+            // Arrays.asList() почти то же, что и List.of(), первый изменяемый(сами элементы, но не размер)
+            /*Person person = session.get(Person.class, 1);
             System.out.println("Получили человека");
+
 
             session.getTransaction().commit();
             System.out.println("Session is end");
@@ -39,7 +45,7 @@ public class App {
 
             person = (Person) session.merge(person);
 
-            System.out.println("2:  " + person.getItems());
+            System.out.println("2:  " + person.getItems());*/
 
             session.getTransaction().commit();
         }
